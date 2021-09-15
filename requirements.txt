@@ -4,8 +4,13 @@ attrs==21.2.0
 chardet==4.0.0
 discord-components==2.1.0
 discord.py==1.7.3
+dnspython==2.1.0
 idna==3.2
 multidict==5.1.0
+pymongo==3.12.0
+pypiwin32==223
 python-dotenv==0.19.0
+pywin32 @ file:///C:/Users/brayd/Desktop/Bots/XFer/pywin32-301-cp39-cp39-win_amd64.whl
+pyWinhook @ file:///C:/Users/brayd/Desktop/Bots/XFer/pyWinhook-1.6.2-cp39-cp39-win_amd64.whl
 typing-extensions==3.10.0.1
 yarl==1.6.3
