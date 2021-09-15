@@ -158,7 +158,7 @@ async def stats(ctx):
 	screen = 1
 
 	char_panel = await buttons(ctx, stat_str_points, stat_int_points, stat_dex_points, stat_con_points, stat_wis_points, allocPoints)
-	await ctx.send(content="**Character Profile**\nPoints Remaining: " + str(allocPoints), components=char_panel, custom_id=ctx.author.id)
+	await ctx.send(content="**Character Profile**\nPoints Remaining: " + str(allocPoints), components=char_panel)
 
 @bot.command()
 async def stats2(ctx):
@@ -279,7 +279,7 @@ async def on_button_click(interaction):
 		char_panel = await buttons(interaction, stat_str_points, stat_int_points, stat_dex_points, stat_con_points, stat_wis_points, allocPoints)
 	elif(screen == 2):
 		char_panel2 = await buttons2(interaction, stat_cha_points, allocPoints)
-	await interaction.message.edit(content="**Character Profile**\nPoints Remaining: " + str(allocPoints), components=char_panel, disabled=True)
+	await interaction.message.edit(content="**Character Profile**\nPoints Remaining: " + str(allocPoints), components=char_panel)
 	await interaction.respond(type=6)
 
 @bot.event
