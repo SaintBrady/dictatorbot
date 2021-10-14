@@ -328,9 +328,4 @@ async def help(ctx, *, args=None):
 			helpMessage += word + "\n"
 	await ctx.channel.send(helpMessage)
 
-@bot.command()
-async def killbatty(ctx):
-	await ctx.send('<@755633025898774538> sup ho')
-	await killbatty(ctx)
-
 bot.run(os.getenv('BOT_TOKEN'))
