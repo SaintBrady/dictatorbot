@@ -517,7 +517,7 @@ class Music(commands.Cog):
         if ctx.voice_client:
             if ctx.voice_client.channel != ctx.author.voice.channel:
                 raise commands.CommandError('Bot is already in a voice channel.')
-                
+
 bot.add_cog(Music(bot))
 
 #-------------------------------------------------------ADMIN COMMANDS------------------------------------------------------------
@@ -786,12 +786,6 @@ async def query_update(user_query):
 	stat_con_points = user_query["stat_constitution"]
 	stat_wis_points = user_query["stat_wisdom"]
 	stat_cha_points = user_query["stat_charisma"]
-
-#------------------------------------------------------MUSIC & VIDEO COMMANDS------------------------------------------------------------
-
-@bot.command()
-async def play(ctx, *, args=None):
-	
 
 #------------------------------------------------------MESSAGE & HELP COMMANDS------------------------------------------------------------
 
