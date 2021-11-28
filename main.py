@@ -653,7 +653,7 @@ class Message(commands.Cog):
         await ctx.channel.send(helpMessage)
 
 intents = discord.Intents(messages=True, members=True, guilds=True)
-bot = commands.Bot(command_prefix='tbot ', help_command=None, intents=intents)
+bot = commands.Bot(command_prefix='!', help_command=None, intents=intents)
 
 bot.add_cog(Music(bot))
 bot.add_cog(Admin(bot))
