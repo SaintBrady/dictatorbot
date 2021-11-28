@@ -361,7 +361,7 @@ class Music(commands.Cog):
     async def _pause(self, ctx: commands.Context):
         """Pauses the currently playing song."""
 
-        if not ctx.voice_state.is_playing and ctx.voice_state.voice.is_playing():
+        if ctx.voice_state.voice.is_playing():
             ctx.voice_state.voice.pause()
             await ctx.message.add_reaction('⏯')
 
@@ -370,7 +370,7 @@ class Music(commands.Cog):
     async def _resume(self, ctx: commands.Context):
         """Resumes a currently paused song."""
 
-        if not ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused():
+        if ctx.voice_state.voice.is_paused():
             ctx.voice_state.voice.resume()
             await ctx.message.add_reaction('⏯')
 
@@ -379,11 +379,8 @@ class Music(commands.Cog):
     async def _stop(self, ctx: commands.Context):
         """Stops playing song and clears the queue."""
 
-        ctx.voice_state.songs.clear()
-
-        if not ctx.voice_state.is_playing:
-            ctx.voice_state.voice.stop()
-            await ctx.message.add_reaction('⏹')
+        ctx.voice_state.voice.stop()
+        await ctx.message.add_reaction('⏹')
 
     @commands.command(name='skip')
     async def _skip(self, ctx: commands.Context):
@@ -647,7 +644,6 @@ class Message(commands.Cog):
                     await message.channel.send("Found a word")
                     await message.channel.send(self.contentDict[word])
                     break
-        await bot.process_commands(message)
 
     @commands.command(name='help')
     async def _help(self, ctx: commands.Context, *, args=None):
