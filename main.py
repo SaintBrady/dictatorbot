@@ -18,6 +18,7 @@ from discord.ext.commands import bot_has_permissions, MissingPermissions
 
 load_dotenv();
 
+
 cluster = MongoClient(os.getenv('DB_TOKEN'))
 db = cluster["UserData"]
 collection = db["UserDataColl"]
@@ -294,7 +295,8 @@ class Music(commands.Cog):
         ctx.voice_state = self.get_voice_state(ctx)
 
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
-        await ctx.send('An error occurred: {}'.format(str(error)))
+        print("KeyError")
+        #await ctx.send('An error occurred: {}'.format(str(error)))
 
     @commands.command(name='join', invoke_without_subcommand=True)
     async def _join(self, ctx: commands.Context):
@@ -499,6 +501,7 @@ class Music(commands.Cog):
             if ctx.voice_client.channel != ctx.author.voice.channel:
                 raise commands.CommandError('Bot is already in a voice channel.')
 
+
 class Config:
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -507,21 +510,32 @@ class Config:
         await Message.refresh()
         DiscordComponents(bot)
 
+
 class Member:
+    command_id_list = {
+        133757834922819584
+    }
+
+    bot_id_list = {
+        881725998834524180,
+        882129649927348244
+    }
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @property
     def is_admin(self, ctx: commands.Context):
-        if ctx.message.author.guild_permissions.administrator or ctx.message.author.id == 133757834922819584:
+        if ctx.message.author.guild_permissions.administrator or ctx.message.author.id in command_id_list:
             return True
         return False
 
     @property
     def is_bot(self, ctx: commands.Context):
-        if ctx.message.author.id == bot.id:
+        if ctx.message.author.id == 882129649927348244:#in self.bot_id_list:
             return True
         return False
+
 
 class Admin(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -589,6 +603,7 @@ class Admin(commands.Cog):
             return
         await ctx.send("Lol, nah fam. Nice try though...")
 
+
 class Message(commands.Cog):
     contentDict = {}
 
@@ -626,10 +641,11 @@ class Message(commands.Cog):
     async def _searchmemes(self, message):
         """Command handler for content file"""
 
-        if not Member.is_bot:
-            for word in contentDict:
+        if not message.author.id == 882129649927348244:#Member.is_bot: #FIX ME (property def ctx called by bot, so id matches)
+            for word in self.contentDict:
                 if word in message.content.lower():
-                    await message.channel.send(contentDict[word])
+                    await message.channel.send("Found a word")
+                    await message.channel.send(self.contentDict[word])
                     break
         await bot.process_commands(message)
 
@@ -652,20 +668,16 @@ class Message(commands.Cog):
                 helpMessage += word + "\n"
         await ctx.channel.send(helpMessage)
 
-intents = discord.Intents(messages=True, members=True, guilds=True)
-bot = commands.Bot(command_prefix='!', help_command=None, intents=intents)
+
+bot = commands.Bot(command_prefix='!', help_command=None)
 
 bot.add_cog(Music(bot))
 bot.add_cog(Admin(bot))
 bot.add_cog(Message(bot))
 
-"""@bot.event
-async def on_ready():
-    print('Logged in as:\n{0.user.name}\n{0.user.id}'.format(bot))"""
 @bot.event
 async def on_ready():
     setup = Message(bot)
     await setup.refresh()
-    DiscordComponents(bot)
 
 bot.run(os.getenv('BOT_TOKEN'))
