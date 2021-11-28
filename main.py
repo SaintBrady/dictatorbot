@@ -669,4 +669,4 @@ async def on_ready():
     setup = Message(bot)
     await setup.refresh()
 
-bot.run(os.getenv('TEST_TOKEN'))
+bot.run(os.getenv('BOT_TOKEN'))
