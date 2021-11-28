@@ -18,6 +18,7 @@ from discord.ext.commands import bot_has_permissions, MissingPermissions
 
 load_dotenv();
 
+
 cluster = MongoClient(os.getenv('DB_TOKEN'))
 db = cluster["UserData"]
 collection = db["UserDataColl"]
@@ -499,6 +500,7 @@ class Music(commands.Cog):
             if ctx.voice_client.channel != ctx.author.voice.channel:
                 raise commands.CommandError('Bot is already in a voice channel.')
 
+
 class Config:
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -506,6 +508,7 @@ class Config:
     async def on_ready(self):
         await Message.refresh()
         DiscordComponents(bot)
+
 
 class Member:
     def __init__(self, bot: commands.Bot):
@@ -522,6 +525,7 @@ class Member:
         if ctx.message.author.id == bot.id:
             return True
         return False
+
 
 class Admin(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -589,6 +593,7 @@ class Admin(commands.Cog):
             return
         await ctx.send("Lol, nah fam. Nice try though...")
 
+
 class Message(commands.Cog):
     contentDict = {}
 
@@ -652,20 +657,16 @@ class Message(commands.Cog):
                 helpMessage += word + "\n"
         await ctx.channel.send(helpMessage)
 
-intents = discord.Intents(messages=True, members=True, guilds=True)
-bot = commands.Bot(command_prefix='!', help_command=None, intents=intents)
+
+bot = commands.Bot(command_prefix='!', help_command=None)
 
 bot.add_cog(Music(bot))
 bot.add_cog(Admin(bot))
 bot.add_cog(Message(bot))
 
-"""@bot.event
-async def on_ready():
-    print('Logged in as:\n{0.user.name}\n{0.user.id}'.format(bot))"""
 @bot.event
 async def on_ready():
     setup = Message(bot)
     await setup.refresh()
-    DiscordComponents(bot)
 
-bot.run(os.getenv('BOT_TOKEN'))
+bot.run(os.getenv('TEST_TOKEN'))
