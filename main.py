@@ -379,7 +379,7 @@ class Music(commands.Cog):
     async def _stop(self, ctx: commands.Context):
         """Stops playing song and clears the queue."""
 
-        ctx.voice_state.voice.stop()
+        await ctx.voice_state.stop()
         await ctx.message.add_reaction('⏹')
 
     @commands.command(name='skip')
@@ -520,18 +520,24 @@ class Member:
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.voice = None
 
     @property
     def is_admin(self, ctx: commands.Context):
-        if ctx.message.author.guild_permissions.administrator or ctx.message.author.id in command_id_list:
+        if ctx.message.author.guild_permissions.administrator or ctx.message.author.id == 133757834922819584:#in command_id_list:
             return True
         return False
 
     @property
     def is_bot(self, ctx: commands.Context):
-        if ctx.message.author.id == 882129649927348244:#in self.bot_id_list:
+        if ctx.message.author.id == 882129649927348244 or ctx.message.author.id == 881725998834524180:#in self.bot_id_list:
             return True
         return False
+
+    @property
+    def is_connected(self, ctx:commands.Context, member):
+        voice_client = get(ctx.member.voice_clients, guild=ctx.guild)
+        return voice_client and voice_client.is_connected()
 
 
 class Admin(commands.Cog):
@@ -565,37 +571,37 @@ class Admin(commands.Cog):
             await ctx.channel.send(embed=embed)
 
     @commands.command(name='gag')
-    async def _gag(self, ctx: commands.Context, *, member: discord.Member):
+    async def _gag(self, ctx: commands.Context, *, target: discord.Member):
         """Mutes specified user from voice channels"""
 
         if Member.is_admin:
-            await member.edit(mute=True)
+            await target.edit(mute=True)
 
     @commands.command(name='ungag')
-    async def _ungag(self, ctx: commands.Context, *, member: discord.Member):
+    async def _ungag(self, ctx: commands.Context, *, target: discord.Member):
         """Unmutes specified user from voice channels"""
 
         if Member.is_admin:
-            await member.edit(mute=False)
+            await target.edit(mute=False)
 
     @commands.command(name='serverkick')
     @bot_has_permissions(administrator=True)
-    async def _serverkick(self, ctx: commands.Context, member: discord.Member, *, reason=None):
+    async def _serverkick(self, ctx: commands.Context, target: discord.Member, *, reason=None):
         """Kicks specified user from server with option comments"""
 
         if Member.is_admin:
-            await ctx.guild.kick(member)
-            await ctx.send(f'User {member} has been kicked for reason: {reason}')
+            await ctx.guild.kick(target)
+            await ctx.send(f'User {target} has been kicked for reason: {reason}')
             return
         await ctx.send("Lol, nah fam. Nice try though...")
 
     @commands.command(name='kick')
     @bot_has_permissions(administrator=True)
-    async def _kick(self, ctx: commands.Context, member: discord.Member, *, reason=None):
+    async def _kick(self, ctx: commands.Context, target: discord.Member, *, reason=None):
         """Kicks specified user from voice channel with option comments"""
 
-        if Member.is_admin:
-            voice = await ctx.author.voice.channel.connect()
+        if Member.is_admin and target.voice.channel:
+            voice = await target.voice.channel.connect()
             await voice.voice_disconnect()
             return
         await ctx.send("Lol, nah fam. Nice try though...")
@@ -641,7 +647,6 @@ class Message(commands.Cog):
         if not message.author.id == 882129649927348244:#Member.is_bot: #FIX ME (property def ctx called by bot, so id matches)
             for word in self.contentDict:
                 if word in message.content.lower():
-                    await message.channel.send("Found a word")
                     await message.channel.send(self.contentDict[word])
                     break
 
