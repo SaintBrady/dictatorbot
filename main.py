@@ -530,7 +530,7 @@ class Member:
 
     @property
     def is_bot(self, ctx: commands.Context):
-        if ctx.message.author.id == 882129649927348244 or ctx.message.author.id == 881725998834524180:#in self.bot_id_list:
+        if ctx.message.author.id == 881725998834524180 or ctx.message.author.id == 882129649927348244:#in self.bot_id_list:
             return True
         return False
 
@@ -644,7 +644,7 @@ class Message(commands.Cog):
     async def _searchmemes(self, message):
         """Command handler for content file"""
 
-        if not message.author.id == 882129649927348244:#Member.is_bot: #FIX ME (property def ctx called by bot, so id matches)
+        if not (message.author.id == 882129649927348244 or message.author.id == 881725998834524180):#Member.is_bot: #FIX ME (property def ctx called by bot, so id matches)
             for word in self.contentDict:
                 if word in message.content.lower():
                     await message.channel.send(self.contentDict[word])
