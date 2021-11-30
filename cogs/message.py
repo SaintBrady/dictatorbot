@@ -5,11 +5,27 @@ from discord.ext import commands
 class Message(commands.Cog):
 
     adminCommands = {
-        "bot mute <User> - Mutes user in voice chat",
-        "bot unmute <User> - Unmutes user in voice chat",
-        "bot chatmute <User> - Mutes user in text chat channels",
-        "bot chatunmute <User> - Unmutes user in text chat channels",
-        "bot kick <User> - Kicks selected user from server"
+        "!gag <User> - Mutes user in voice chat",
+        "!ungag <User> - Unmutes user in voice chat",
+        "!mute <User> - Mutes user in text chat channels",
+        "!unmute <User> - Unmutes user in text chat channels",
+        "!kick <User> - Kicks selected user from voice chat",
+        "!serverkick <User> - Kicks selected user from server",
+    }
+
+    musicCommands = {
+        "!play <Song name / URL> - Searches and plays song from Youtube URL",
+        "!pause - Pauses current song",
+        "!resume - Resumes current song",
+        "!skip - Skips current song",
+        "!stop - Stops current song and disconnects bot",
+        "!now - Lists current song",
+        "!remove <# in Queue> - Removes song in selected position from queue",
+        "!queue - Lists current song queue",
+        "!shuffle - Shuffles current song queue",
+        "!join - Connects bot to users VC",
+        "!leave - Disonnects bot to users VC",
+        "!summon - Summons bot to users VC",
     }
 
     contentDict = {}
@@ -49,18 +65,27 @@ class Message(commands.Cog):
         """Lists available bot commands"""
 
         helpMessage = ''
-        if(args=='admin'):
+
+        if(args==None):
+            helpMessage = "**SYNTAX**\n!help message - message commands\n!help music - music commands\n!help admin - Admin commands"
+        
+        elif(args=='admin'):
             if not Member.is_admin:
                 await ctx.channel.send("Permission Denied. Access restricted to adminitrators.")
                 return
-            await ctx.channel.send("**ADMIN COMMANDS**")
+            helpMessage = "**ADMIN COMMANDS**\n"
             for command in self.adminCommands:
                 helpMessage += command + "\n"
 
-        else:
+        elif(args=='message'):
             helpMessage = '**BOT COMMANDS**\n'
             for word in self.contentDict:
                 helpMessage += word + "\n"
+
+        elif(args=='music'):
+            helpMessage = "**MUSIC COMMANDS**\n"
+            for command in self.musicCommands:
+                helpMessage += command + "\n"
         await ctx.channel.send(helpMessage)
 
 def setup(bot):
