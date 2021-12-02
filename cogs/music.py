@@ -108,7 +108,7 @@ class Music(commands.Cog):
     async def _pause(self, ctx: commands.Context):
         """Pauses the currently playing song."""
 
-        if ctx.voice_state.voice.is_playing():
+        if ctx.voice_state.voice.is_playing():# or ctx.voice_state.voice.is_playing:
             ctx.voice_state.voice.pause()
             await ctx.message.add_reaction('⏯')
 
@@ -117,7 +117,7 @@ class Music(commands.Cog):
     async def _resume(self, ctx: commands.Context):
         """Resumes a currently paused song."""
 
-        if ctx.voice_state.voice.is_paused():
+        if ctx.voice_state.voice.is_paused():# or ctx.voice_state.voice.is_paused:
             ctx.voice_state.voice.resume()
             await ctx.message.add_reaction('⏯')
 
@@ -157,10 +157,17 @@ class Music(commands.Cog):
             await ctx.send('You have already voted to skip this song.')
 
     @commands.command(name='queue')
-    async def _queue(self, ctx: commands.Context, *, page: int = 1):
+    async def _queue(self, ctx: commands.Context, *, page: str = '1'):
         """Shows the player's queue.
         You can optionally specify the page to show. Each page contains 10 elements.
         """
+
+        #Allows queue method to use play method functionality
+        try:
+            page = int(page)
+
+        except ValueError:
+            return await self._play(ctx, search=page)
 
         if len(ctx.voice_state.songs) == 0:
             return await ctx.send('Empty queue.')

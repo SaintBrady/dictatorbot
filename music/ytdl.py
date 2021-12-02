@@ -11,7 +11,7 @@ youtube_dl.utils.bug_reports_message = lambda: ''
 
 
 class YTDLError(Exception):
-    pass
+    print(Exception)
 
 
 class YTDLSource(discord.PCMVolumeTransformer):
