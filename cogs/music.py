@@ -220,13 +220,17 @@ class Music(commands.Cog):
         await ctx.message.add_reaction('✅')
 
     @commands.command(name='play')
-    async def _play(self, ctx: commands.Context, *, search: str):
+    async def _play(self, ctx: commands.Context, *, search: str = None):
         """Plays a song.
         If there are songs in the queue, this will be queued until the
         other songs finished playing.
         This command automatically searches from various sites if no URL is provided.
         A list of these sites can be found here: https://rg3.github.io/youtube-dl/supportedsites.html
         """
+
+        #Allows play method to use resume method functionality
+        if(search == None):
+            return await self._resume(ctx)
 
         if not ctx.voice_state.voice:
             await ctx.invoke(self._join)

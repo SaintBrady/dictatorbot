@@ -2,6 +2,7 @@ import discord
 import youtube_dl
 import asyncio
 import functools
+import os
 
 from async_timeout import timeout
 from discord.ext import commands
@@ -29,6 +30,11 @@ class YTDLSource(discord.PCMVolumeTransformer):
         'no_warnings': True,
         'default_search': 'auto',
         'source_address': '0.0.0.0',
+        'geobypass': True,
+        'nocachedir': True,
+        'rmcachedir': True,
+        'username': os.getenv('USERNAME'),
+        'password': os.getenv('PASSWORD'),
     }
 
     FFMPEG_OPTIONS = {
