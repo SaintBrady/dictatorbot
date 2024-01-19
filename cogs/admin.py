@@ -68,5 +68,5 @@ class Admin(commands.Cog):
             return
         await ctx.send("Lol, nah fam. Nice try though...")
 
-def setup(bot):
-	bot.add_cog(Admin(bot))
+async def setup(bot):
+    await bot.add_cog(Admin(bot))

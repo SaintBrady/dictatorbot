@@ -8,6 +8,7 @@ from music.ytdl import YTDLSource
 from discord.ext import commands
 
 class YTDLError(Exception):
+    print(Exception)
     pass
 
 
@@ -257,5 +258,5 @@ class Music(commands.Cog):
                 raise commands.CommandError('Bot is already in a voice channel.')
 
 
-def setup(bot):
-    bot.add_cog(Music(bot))
+async def setup(bot):
+    await bot.add_cog(Music(bot))

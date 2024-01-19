@@ -47,7 +47,7 @@ class Message(commands.Cog):
 
         self.contentDict.clear()
         self.contentDict["***Phrases***"] = ""
-        self.contentDict["baka"] = "You kinda smell\nLike a BAKA\n**E R E N     Y E A G E R**"
+        self.contentDict["baka"] = "You kinda smell\nLike a B A K A\n**E R E N     Y E A G E R**"
         self.contentDict["***Images & GIFs***"] =  ""
 
     @commands.Cog.listener("on_message")
@@ -88,7 +88,7 @@ class Message(commands.Cog):
                 helpMessage += command + "\n"
         await ctx.channel.send(helpMessage)
 
-def setup(bot):
+async def setup(bot):
     msg = Message(bot)
     msg.refresh()
-    bot.add_cog(msg)
+    await bot.add_cog(msg)
